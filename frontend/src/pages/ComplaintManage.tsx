@@ -50,7 +50,7 @@ export function ComplaintManage() {
               <CardContent>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <Typography variant="h6">{item.title}</Typography>
-                  <StatusBadge value={item.status} />
+                  <StatusBadge value={`complaint:${item.status}`} />
                 </Stack>
                 <Typography color="text.secondary" sx={{ mt: 1 }}>关联订单：
                   <Link to={`/orders/${item.orderId}`} style={{ marginLeft: 4 }}>

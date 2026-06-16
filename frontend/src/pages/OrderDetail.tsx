@@ -99,7 +99,7 @@ export function OrderDetail() {
                   <Stack spacing={1} sx={{ mt: 2 }}>
                     <Stack direction="row" justifyContent="space-between" alignItems="center">
                       <Typography>{relatedComplaint.title}</Typography>
-                      <StatusBadge value={relatedComplaint.status} />
+                      <StatusBadge value={`complaint:${relatedComplaint.status}`} />
                     </Stack>
                     <Typography color="text.secondary">{relatedComplaint.content}</Typography>
                     {relatedComplaint.handleResult && (
@@ -117,7 +117,7 @@ export function OrderDetail() {
                   <Stack spacing={1} sx={{ mt: 2 }}>
                     <Stack direction="row" justifyContent="space-between" alignItems="center">
                       <Typography>{relatedComplaint.title}</Typography>
-                      <StatusBadge value={relatedComplaint.status} />
+                      <StatusBadge value={`complaint:${relatedComplaint.status}`} />
                     </Stack>
                     <Typography color="text.secondary">{relatedComplaint.content}</Typography>
                     {relatedComplaint.handleResult && (
