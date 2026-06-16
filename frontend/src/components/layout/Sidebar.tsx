@@ -2,6 +2,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import EngineeringIcon from '@mui/icons-material/Engineering';
 import RoomServiceIcon from '@mui/icons-material/RoomService';
+import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import { List, ListItemButton, ListItemIcon, ListItemText, Toolbar } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { UserRole } from '../../constants/enums';
@@ -10,6 +11,7 @@ import { useAuthStore } from '../../stores/authStore';
 const nav = [
   { label: '首页', path: '/', icon: HomeIcon },
   { label: '订单中心', path: '/orders', icon: ReceiptLongIcon },
+  { label: '投诉管理', path: '/complaints', icon: ReportProblemIcon, roles: [UserRole.ADMIN, UserRole.CUSTOMER] },
   { label: '技师管理', path: '/workers', icon: EngineeringIcon, roles: [UserRole.ADMIN] },
   { label: '服务管理', path: '/services', icon: RoomServiceIcon, roles: [UserRole.ADMIN] }
 ];

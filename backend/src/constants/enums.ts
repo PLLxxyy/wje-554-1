@@ -34,3 +34,10 @@ export enum ServiceStatus {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE'
 }
+
+export enum ComplaintStatus {
+  PENDING = 'PENDING',
+  PROCESSING = 'PROCESSING',
+  RESOLVED = 'RESOLVED',
+  REJECTED = 'REJECTED'
+}

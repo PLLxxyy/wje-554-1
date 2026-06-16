@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardContent, Grid, Stack, TextField, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Stack, TextField, Typography } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { OrderStatus, UserRole } from '../constants/enums';
@@ -7,6 +7,7 @@ import { PageHeader } from '../components/common/PageHeader';
 import { RatingStars } from '../components/common/RatingStars';
 import { StatusBadge } from '../components/common/StatusBadge';
 import { useAuthStore } from '../stores/authStore';
+import { useComplaintStore } from '../stores/complaintStore';
 import { useOrderStore } from '../stores/orderStore';
 import { datetime, money } from '../utils/format';
 
@@ -14,10 +15,25 @@ export function OrderDetail() {
   const { id = '' } = useParams();
   const role = useAuthStore((state) => state.user?.role);
   const { current, loadOrder, updateStatus, cancel, rate } = useOrderStore();
+  const { complaints, loadComplaints, createComplaint } = useComplaintStore();
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('服务准时，沟通顺畅。');
+  const [complaintOpen, setComplaintOpen] = useState(false);
+  const [complaintTitle, setComplaintTitle] = useState('');
+  const [complaintContent, setComplaintContent] = useState('');
 
   useEffect(() => { loadOrder(id); }, [id, loadOrder]);
+  useEffect(() => { if (role === UserRole.CUSTOMER) loadComplaints(); }, [role, loadComplaints]);
+
+  const relatedComplaint = useMemo(() => complaints.find((c) => c.orderId === id), [complaints, id]);
+
+  const submitComplaint = async () => {
+    if (!complaintTitle.trim() || !complaintContent.trim()) return;
+    await createComplaint({ orderId: id, title: complaintTitle.trim(), content: complaintContent.trim() });
+    setComplaintOpen(false);
+    setComplaintTitle('');
+    setComplaintContent('');
+  };
 
   const actions = useMemo(() => {
     if (!current) return [];
@@ -75,8 +91,63 @@ export function OrderDetail() {
               <Stack spacing={1} sx={{ mt: 2 }}><RatingStars value={current.rating} readOnly /><Typography>{current.comment}</Typography></Stack>
             ) : <Typography color="text.secondary" sx={{ mt: 2 }}>完工后客户可评价。</Typography>}
           </CardContent></Card>
+          {[OrderStatus.COMPLETED, OrderStatus.RATED].includes(current.status) && (
+            <Card sx={{ mt: 3 }}><CardContent>
+              <Typography variant="h6">投诉</Typography>
+              {role === UserRole.CUSTOMER ? (
+                relatedComplaint ? (
+                  <Stack spacing={1} sx={{ mt: 2 }}>
+                    <Stack direction="row" justifyContent="space-between" alignItems="center">
+                      <Typography>{relatedComplaint.title}</Typography>
+                      <StatusBadge value={relatedComplaint.status} />
+                    </Stack>
+                    <Typography color="text.secondary">{relatedComplaint.content}</Typography>
+                    {relatedComplaint.handleResult && (
+                      <Card variant="outlined" sx={{ mt: 1 }}><CardContent>
+                        <Typography variant="subtitle2" color="text.secondary">处理结果</Typography>
+                        <Typography>{relatedComplaint.handleResult}</Typography>
+                      </CardContent></Card>
+                    )}
+                    <Typography color="text.secondary" variant="body2">提交时间：{datetime(relatedComplaint.createdAt)}</Typography>
+                  </Stack>
+                ) : (
+                  <Button color="error" variant="outlined" fullWidth sx={{ mt: 2 }} onClick={() => setComplaintOpen(true)}>发起投诉</Button>
+                )
+              ) : relatedComplaint ? (
+                  <Stack spacing={1} sx={{ mt: 2 }}>
+                    <Stack direction="row" justifyContent="space-between" alignItems="center">
+                      <Typography>{relatedComplaint.title}</Typography>
+                      <StatusBadge value={relatedComplaint.status} />
+                    </Stack>
+                    <Typography color="text.secondary">{relatedComplaint.content}</Typography>
+                    {relatedComplaint.handleResult && (
+                      <Card variant="outlined"><CardContent>
+                        <Typography variant="subtitle2" color="text.secondary">处理结果</Typography>
+                        <Typography>{relatedComplaint.handleResult}</Typography>
+                      </CardContent></Card>
+                    )}
+                    <Typography color="text.secondary" variant="body2">提交时间：{datetime(relatedComplaint.createdAt)}</Typography>
+                  </Stack>
+                ) : (
+                  <Typography color="text.secondary" sx={{ mt: 2 }}>暂无投诉记录</Typography>
+                )}
+            </CardContent></Card>
+          )}
         </Grid>
       </Grid>
+      <Dialog open={complaintOpen} onClose={() => setComplaintOpen(false)} maxWidth="sm" fullWidth>
+        <DialogTitle>发起投诉</DialogTitle>
+        <DialogContent>
+          <Stack spacing={2} sx={{ mt: 1 }}>
+            <TextField label="投诉标题" fullWidth value={complaintTitle} onChange={(e) => setComplaintTitle(e.target.value)} placeholder="请简要描述问题" />
+            <TextField label="投诉内容" fullWidth multiline minRows={5} value={complaintContent} onChange={(e) => setComplaintContent(e.target.value)} placeholder="请详细描述您遇到的问题" />
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setComplaintOpen(false)}>取消</Button>
+          <Button variant="contained" color="error" onClick={submitComplaint} disabled={!complaintTitle.trim() || !complaintContent.trim()}>提交投诉</Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

@@ -1,5 +1,5 @@
 import { Chip } from '@mui/material';
-import { OrderStatus, ServiceStatus, WorkerStatus } from '../../constants/enums';
+import { ComplaintStatus, OrderStatus, ServiceStatus, WorkerStatus } from '../../constants/enums';
 
 const labels: Record<string, string> = {
   [OrderStatus.PENDING]: '待派单',
@@ -15,7 +15,11 @@ const labels: Record<string, string> = {
   [WorkerStatus.OFFLINE]: '离线',
   [WorkerStatus.PENDING_REVIEW]: '审核中',
   [ServiceStatus.ACTIVE]: '上架',
-  [ServiceStatus.INACTIVE]: '下架'
+  [ServiceStatus.INACTIVE]: '下架',
+  [ComplaintStatus.PENDING]: '待处理',
+  [ComplaintStatus.PROCESSING]: '处理中',
+  [ComplaintStatus.RESOLVED]: '已解决',
+  [ComplaintStatus.REJECTED]: '已驳回'
 };
 
 const colors: Record<string, 'default' | 'primary' | 'success' | 'warning' | 'error' | 'info' | 'secondary'> = {
@@ -30,7 +34,11 @@ const colors: Record<string, 'default' | 'primary' | 'success' | 'warning' | 'er
   [WorkerStatus.OFFLINE]: 'default',
   [WorkerStatus.PENDING_REVIEW]: 'info',
   [ServiceStatus.ACTIVE]: 'success',
-  [ServiceStatus.INACTIVE]: 'default'
+  [ServiceStatus.INACTIVE]: 'default',
+  [ComplaintStatus.PENDING]: 'warning',
+  [ComplaintStatus.PROCESSING]: 'info',
+  [ComplaintStatus.RESOLVED]: 'success',
+  [ComplaintStatus.REJECTED]: 'error'
 };
 
 export function StatusBadge({ value }: { value: string }) {

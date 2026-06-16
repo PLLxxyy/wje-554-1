@@ -9,6 +9,7 @@ import { OrderList } from '../pages/OrderList';
 import { OrderDetail } from '../pages/OrderDetail';
 import { WorkerManage } from '../pages/WorkerManage';
 import { ServiceManage } from '../pages/ServiceManage';
+import { ComplaintManage } from '../pages/ComplaintManage';
 import { NotFound } from '../pages/NotFound';
 
 export const router = createBrowserRouter([
@@ -23,6 +24,12 @@ export const router = createBrowserRouter([
           { path: '/', element: <Home /> },
           { path: '/orders', element: <OrderList /> },
           { path: '/orders/:id', element: <OrderDetail /> },
+          {
+            element: <ProtectedRoute roles={[UserRole.ADMIN, UserRole.CUSTOMER]} />,
+            children: [
+              { path: '/complaints', element: <ComplaintManage /> }
+            ]
+          },
           {
             element: <ProtectedRoute roles={[UserRole.ADMIN]} />,
             children: [

@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 
 export interface NotificationPayload {
-  type: 'order:status_changed' | 'order:new_assignment' | 'order:worker_arriving';
+  type: 'order:status_changed' | 'order:new_assignment' | 'order:worker_arriving' | 'complaint:new' | 'complaint:resolved';
   title: string;
   message: string;
   orderId?: string;
+  complaintId?: string;
   userIds?: string[];
 }
 

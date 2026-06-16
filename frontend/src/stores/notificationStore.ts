@@ -2,10 +2,11 @@ import { create } from 'zustand';
 
 export interface AppNotification {
   id: string;
-  type: 'order:status_changed' | 'order:new_assignment' | 'order:worker_arriving';
+  type: 'order:status_changed' | 'order:new_assignment' | 'order:worker_arriving' | 'complaint:new' | 'complaint:resolved';
   title: string;
   message: string;
   orderId?: string;
+  complaintId?: string;
   read: boolean;
   createdAt: string;
 }

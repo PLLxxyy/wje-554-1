@@ -44,6 +44,13 @@ enum ServiceStatus {
   INACTIVE
 }
 
+enum ComplaintStatus {
+  PENDING
+  PROCESSING
+  RESOLVED
+  REJECTED
+}
+
 model User {
   id        String         @id @default(uuid())
   username  String         @unique
@@ -122,4 +129,20 @@ model AuditLog {
   ip           String?
   params       Json?
   createdAt    DateTime @default(now())
+}
+
+model Complaint {
+  id           String          @id @default(uuid())
+  orderId      String          @unique
+  customerId   String
+  title        String
+  content      String
+  status       ComplaintStatus @default(PENDING)
+  handlerId    String?
+  handleResult String?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  order        ServiceOrder    @relation(fields: [orderId], references: [id])
+  customer     User            @relation(fields: [customerId], references: [id])
+  handler      User?           @relation(fields: [handlerId], references: [id])
 }

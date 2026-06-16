@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
-import { OrderStatus, ServiceCategory, ServiceStatus, UserRole, WorkerStatus } from '../constants/enums';
+import { ComplaintStatus, OrderStatus, ServiceCategory, ServiceStatus, UserRole, WorkerStatus } from '../constants/enums';
 import { UserEntity } from './auth/auth.service';
+import { ComplaintEntity } from './complaint/entities/complaint.entity';
 import { OrderEntity } from './order/entities/order.entity';
 import { ServiceEntity } from './service/entities/service.entity';
 import { WorkerEntity } from './worker/entities/worker.entity';
@@ -31,5 +32,19 @@ export const workers: WorkerEntity[] = [
 export const orders: OrderEntity[] = [
   { id: 'ord-1', orderNo: 'HS-20260616-0001', serviceItemId: 'svc-clean-deep', customerId: 'u-customer', workerId: 'w-chen', address: '上海市徐汇区漕溪北路', addressDetail: '18号 1202', contactPhone: '13800000001', scheduledTime: iso(8), status: OrderStatus.IN_PROGRESS, totalPrice: 268, createdAt: iso(-8), updatedAt: iso(-1) },
   { id: 'ord-2', orderNo: 'HS-20260616-0002', serviceItemId: 'svc-plumb-pipe', customerId: 'u-customer', workerId: 'w-zhao', address: '上海市静安区南京西路', addressDetail: '66号 503', contactPhone: '13800000001', scheduledTime: iso(20), status: OrderStatus.ASSIGNED, totalPrice: 158, createdAt: iso(-3), updatedAt: iso(-2) },
-  { id: 'ord-3', orderNo: 'HS-20260615-0008', serviceItemId: 'svc-errand-doc', customerId: 'u-customer', workerId: 'w-liu', address: '上海市浦东新区世纪大道', addressDetail: '100号', contactPhone: '13800000001', scheduledTime: iso(-24), status: OrderStatus.RATED, totalPrice: 49, actualDuration: 35, rating: 5, comment: '速度很快。', createdAt: iso(-48), updatedAt: iso(-20) }
+  { id: 'ord-3', orderNo: 'HS-20260615-0008', serviceItemId: 'svc-errand-doc', customerId: 'u-customer', workerId: 'w-liu', address: '上海市浦东新区世纪大道', addressDetail: '100号', contactPhone: '13800000001', scheduledTime: iso(-24), status: OrderStatus.RATED, totalPrice: 49, actualDuration: 35, rating: 5, comment: '速度很快。', createdAt: iso(-48), updatedAt: iso(-20) },
+  { id: 'ord-4', orderNo: 'HS-20260614-0012', serviceItemId: 'svc-repair-lock', customerId: 'u-customer', workerId: 'w-zhao', address: '上海市长宁区仙霞路', addressDetail: '88号 301', contactPhone: '13800000001', scheduledTime: iso(-48), status: OrderStatus.COMPLETED, totalPrice: 120, actualDuration: 60, createdAt: iso(-72), updatedAt: iso(-50) }
+];
+
+export const complaints: ComplaintEntity[] = [
+  {
+    id: 'cmp-1',
+    orderId: 'ord-4',
+    customerId: 'u-customer',
+    title: '门锁维修后仍无法正常使用',
+    content: '维修师傅上门换了锁芯，但第二天锁又不好用了，希望重新处理或退款。',
+    status: ComplaintStatus.PENDING,
+    createdAt: iso(-22),
+    updatedAt: iso(-22)
+  }
 ];

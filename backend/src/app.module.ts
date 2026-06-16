@@ -5,6 +5,7 @@ import { AuditInterceptor } from './common/interceptors/audit.interceptor';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { AuditModule } from './modules/audit/audit.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { ComplaintModule } from './modules/complaint/complaint.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { NotificationModule } from './modules/notification/notification.module';
 import { OrderModule } from './modules/order/order.module';
@@ -22,6 +23,7 @@ import { PrismaModule } from './prisma/prisma.module';
     WorkerModule,
     NotificationModule,
     OrderModule,
+    ComplaintModule,
     DashboardModule
   ],
   providers: [{ provide: APP_INTERCEPTOR, useClass: AuditInterceptor }]
